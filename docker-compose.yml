@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   web:
-    container_name: backend
+    container_name: backend_django
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -15,21 +15,17 @@ services:
       - db
 
   frontend:
-    container_name: frontend
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "8080:80"
-    volumes:
-      - ./frontend:/app
-    depends_on:
-      - web
+      - "5137:80"
 
   db:
     container_name: postgres_db
     image: postgres:13
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
