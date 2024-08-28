@@ -4,4 +4,4 @@ from .models import Wish
 
 @admin.register(Wish)
 class WishAdmin(admin.ModelAdmin):
-    list_display = ('name', 'image_url', 'link', 'price')
+    list_display = ('name', 'image', 'link', 'price', 'achieved', 'reserved')
