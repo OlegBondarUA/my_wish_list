@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from rest_framework import generics
+from .models import Wish
+from .serializers import WishSerializer
 
-# Create your views here.
+
+class WishListAPIView(generics.ListAPIView):
+    queryset = Wish.objects.all()
+    serializer_class = WishSerializer
