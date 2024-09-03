@@ -2,7 +2,9 @@
   <div>
     <h1>My Wishes</h1>
     <div v-if="wishes.length">
-      <WishItem v-for="wish in wishes" :key="wish.id" :wish="wish" />
+      <div class="wish-list">
+        <WishItem v-for="wish in wishes" :key="wish.id" :wish="wish" />
+      </div>
     </div>
     <div v-else>
       <p>No wishes found.</p>
@@ -44,9 +46,16 @@ h1 {
   margin-bottom: 24px;
 }
 
-div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.wish-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 0 16px;
+}
+
+@media (max-width: 600px) {
+  .wish-list {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 }
 </style>
