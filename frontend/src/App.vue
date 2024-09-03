@@ -1,11 +1,11 @@
 <script setup>
+import Header from './components/Header.vue'
 import WishesPage from './pages/WishesPage.vue'
 </script>
 
 <template>
-  <div id="app">
-    <WishesPage />
-  </div>
+  <Header />
+  <router-view />
 </template>
 
 <style scoped>
