@@ -1,12 +1,11 @@
 <template>
   <div class="wish-item">
-    <a :href="wish.link" class="img-box" target="_blank" rel="noopener noreferrer">
+    <router-link :to="`/wish/${wish.id}`" class="img-box">
       <img :src="wish.image" alt="Wish Image" />
-    </a>
-    <div class="description">
-      <h3>{{ wish.name }}</h3>
-      <p>{{ wish.price }}</p>
-    </div>
+      <div class="wish-overlay">
+        <h3>{{ wish.name }}</h3>
+      </div>
+    </router-link>
   </div>
 </template>
 
@@ -23,12 +22,13 @@ export default {
 
 <style scoped>
 .wish-item {
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  position: relative;
+  width: 100%;
+  max-width: 200px;
+  margin: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   transition: transform 0.3s ease;
-  text-align: center;
 }
 
 .wish-item:hover {
@@ -36,33 +36,37 @@ export default {
 }
 
 .img-box {
-  display: flex;
-  width: 205px;
-  height: 205px;
-  text-align: center;
-  padding: 16px;
-  align-items: center;
+  display: block;
+  position: relative;
 }
 
 .img-box img {
-  max-width: 205px;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
 }
 
-.description {
-  padding: 16px;
+.wish-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.description h3 {
-  margin: 0;
-  font-size: 1.2em;
+.wish-item:hover .wish-overlay {
+  opacity: 1;
 }
 
-.description p {
-  margin: 8px 0;
+.wish-overlay h3 {
+  color: white;
+  font-size: 1.5em;
+  text-align: center;
 }
 </style>
