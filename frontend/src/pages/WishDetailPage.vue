@@ -53,27 +53,31 @@ export default {
 
 <style scoped>
 .wish-detail {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #1f1f1f;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 .wish-image {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-bottom: 20px;
+  max-width: 300px;
+  border-radius: 8px;
 }
 
 .wish-actions {
   display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+  flex-direction: column;
+  gap: 10px;
 }
 
 button {
   padding: 10px 20px;
   border: none;
-  background-color: #4caf50;
+  border-radius: 4px;
+  background-color: #ff8c00;
   color: white;
   cursor: pointer;
 }
@@ -84,9 +88,10 @@ button[disabled] {
 
 .go-to-store {
   padding: 10px 20px;
-  background-color: #2196f3;
+  background-color: #007bff;
   color: white;
   text-decoration: none;
   display: inline-block;
+  border-radius: 4px;
 }
 </style>
