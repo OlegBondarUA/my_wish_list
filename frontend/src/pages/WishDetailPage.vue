@@ -1,5 +1,5 @@
 <template>
-  <div class="wish-detail">
+  <div v-if="wish" class="wish-detail">
     <img :src="wish.image" alt="Wish Image" class="wish-image" />
     <h1>{{ wish.name }}</h1>
     <p>{{ wish.description }}</p>
@@ -13,6 +13,10 @@
         Go to store
       </a>
     </div>
+  </div>
+
+  <div v-else>
+    Loading wish details...
   </div>
 </template>
 
