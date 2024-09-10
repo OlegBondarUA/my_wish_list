@@ -1,11 +1,22 @@
 body {
-  background-color: #1a1a1a;
   margin: 0;
   padding: 0;
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
+  width: 100vw;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-color: #1a1a1a;
 }
+
+#app {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
 
 .gradient1, .gradient2, .gradient3 {
   position: absolute;
