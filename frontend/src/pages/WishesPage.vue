@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>My Wishes</h1>
+    <h1>Wishes {{ user }}</h1>
     <div v-if="wishes.length">
       <div class="wish-list">
         <WishItem v-for="wish in wishes" :key="wish.id" :wish="wish" />
@@ -44,13 +44,16 @@ export default {
 h1 {
   text-align: center;
   margin-bottom: 24px;
+  color: white;
+  font-family: "Playwrite CU", cursive;
+  font-optical-sizing: auto;
 }
 
 .wish-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 16px;
-  padding: 0 16px;
+  padding: 0 20px;
 }
 
 @media (max-width: 600px) {

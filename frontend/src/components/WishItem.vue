@@ -22,17 +22,13 @@ export default {
 
 <style scoped>
 .wish-item {
+  display: grid;
+  align-content: center;
   position: relative;
   width: 100%;
-  max-width: 200px;
-  margin: 16px;
   overflow: hidden;
-  border-radius: 8px;
-  transition: transform 0.3s ease;
-}
-
-.wish-item:hover {
-  transform: translateY(-10px);
+  border-radius: 15px;
+  background: grey;
 }
 
 .img-box {
@@ -44,6 +40,7 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 15px;
 }
 
 .wish-overlay {
@@ -62,6 +59,7 @@ export default {
 
 .wish-item:hover .wish-overlay {
   opacity: 1;
+  border-radius: 15px;
 }
 
 .wish-overlay h3 {
