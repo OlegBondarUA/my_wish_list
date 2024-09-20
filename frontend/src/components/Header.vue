@@ -20,28 +20,43 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  background-color: #f8f9fa;
+  padding: 0 10px;
+  border-radius: 0 0 15px 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 h1 {
   margin: 0;
-  font-size: 24px;
+  font-size: 28px;
+  font-family: "Playwrite CU", cursive;
+  font-optical-sizing: auto;
+  color: #fff;
 }
 
 nav ul {
   list-style: none;
   display: flex;
   gap: 20px;
+  margin: 0;
+  padding: 0;
 }
 
 nav a {
   text-decoration: none;
-  color: #007bff;
+  color: #ffffff;
+  font-family: "Playwrite CU", cursive;
+  font-optical-sizing: auto;
   font-weight: bold;
+  font-size: 18px;
+  transition: color 0.3s ease;
 }
 
 nav a:hover {
-  color: #0056b3;
+  color: #50c878;
 }
 </style>
