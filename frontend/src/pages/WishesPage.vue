@@ -15,23 +15,34 @@
       <p>No wishes found.</p>
     </div>
 
-    <div v-if="showForm" class="wish-form">
-      <h2>Add New Wish</h2>
-      <form @submit.prevent="submitForm">
-        <label for="name">Name:</label>
-        <input type="text" v-model="newWish.name" required />
+    <div v-if="showForm" class="wrapper">
+      <form action="">
+        <h1>Add New Wish</h1>
+        <div class="input-box">
+          <input type="text" placeholder="Title" required/>
+          <i class='bx bx-captions'></i>
+        </div>
 
-        <label for="image">Image:</label>
-        <input type="file" @change="handleFileUpload" required />
+        <div class="input-box">
+          <input type="file" placeholder="Image" required/>
+          <i class='bx bx-image-add'></i>
+        </div>
 
-        <label for="description">Description:</label>
-        <textarea v-model="newWish.description"></textarea>
+        <div class="input-box">
+          <textarea placeholder="Description" required/>
+          <i class='bx bx-detail'></i>
+        </div>
 
-        <label for="link">Link:</label>
-        <input type="url" v-model="newWish.link" required />
+        <div class="input-box">
+          <input type="url" placeholder="link" required/>
+          <i class='bx bx-link' ></i>
+        </div>
 
-        <label for="price">Price:</label>
-        <input type="number" v-model="newWish.price" step="0.01" required />
+        <div class="input-box">
+          <input type="number" placeholder="Price" required/>
+          <i class='bx bx-dollar'></i>
+        </div>
+
         <div class="button-box">
           <button type="submit">Add Wish</button>
           <button type="button" @click="toggleForm">Cancel</button>
@@ -118,67 +129,92 @@ h1 {
   backdrop-filter: blur(10px);
 }
 
-.wish-form {
-  max-width: 275px;
-  margin-top: 20px;
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body{
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
   justify-content: center;
-  background: ghostwhite;
-  padding: 20px;
-  border-radius: 15px;
+  align-content: center;
+  min-height: 100vh;
+}
+
+.wrapper{
   position: absolute;
-  top: 50%;
   left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1000;
-}
-
-.wish-form form {
-  width: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  flex-direction: column;
-}
-.wish-form label {
-  font-weight: bold;
-}
-
-.wish-form input,
-.wish-form textarea {
-  width: 255px;
-  height: 20px;
-  padding: 8px;
-  border: 2px solid darkseagreen;
+  width: 420px;
+  background: black;
+  border: 2px solid rgb(255, 255, 255, .2);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+  color: #fff;
   border-radius: 10px;
+  padding: 30px 40px;
 }
 
-.button-box {
+.wrapper h1{
+  font-size: 36px;
+  text-align: center;
+}
+
+.wrapper .input-box{
   width: 100%;
+  height: 50px;
+  margin: 30px 0;
+  position: relative;
+}
+
+.input-box input,
+.input-box textarea{
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: 2px solid rgb(225, 225, 225, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder,
+.input-box textarea::placeholder{
+  color: #fff;
+}
+
+.input-box i{
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+}
+
+.wrapper .button-box{
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
 }
 
-button {
-  padding: 10px;
-  margin-top: 10px;
-  background-color: #007bff;
-  color: white;
+.wrapper .button-box button{
+  width: 100%;
+  height: 45px;
+  background: #fff;
   border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgb(0, 0, 0, .1);
   cursor: pointer;
-  border-radius: 5px;
-}
-
-button[type="button"] {
-  background-color: #6c757d;
-}
-
-button:hover {
-  background-color: #0056b3;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
 }
 
 @media (max-width: 600px) {

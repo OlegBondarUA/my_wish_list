@@ -50,7 +50,7 @@ body{
   top: 50%;
   transform: translate(-50%, -50%);
   width: 420px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgb(255, 255, 255, .2);
   backdrop-filter: blur(20px);
   box-shadow: 0 0 10px rgba(0, 0, 0, .2);
