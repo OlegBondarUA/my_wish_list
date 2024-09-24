@@ -24,18 +24,21 @@
         </div>
 
         <div class="input-box">
-          <input type="file" placeholder="Image" required/>
-          <i class='bx bx-image-add'></i>
+          <input type="file" id="file-input" @change="handleFileChange" required/>
+          <label for="file-input" class="file-label">
+            <span id="file-name">No file chosen</span>
+            <i class='bx bx-image-add'></i>
+          </label>
         </div>
 
         <div class="input-box">
-          <textarea placeholder="Description" required/>
+          <input type="text" placeholder="Description" required/>
           <i class='bx bx-detail'></i>
         </div>
 
         <div class="input-box">
           <input type="url" placeholder="link" required/>
-          <i class='bx bx-link' ></i>
+          <i class='bx bx-link'></i>
         </div>
 
         <div class="input-box">
@@ -87,6 +90,11 @@ export default {
     toggleForm() {
       this.showForm = !this.showForm;
     },
+    handleFileChange(event) {
+      const fileInput = event.target;
+      const fileName = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
+      document.getElementById('file-name').textContent = fileName;
+    },
     handleFileUpload(event) {
       this.newWish.image = event.target.files[0];
     },
@@ -129,27 +137,27 @@ h1 {
   backdrop-filter: blur(10px);
 }
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
 
-body{
+body {
   display: flex;
   justify-content: center;
   align-content: center;
   min-height: 100vh;
 }
 
-.wrapper{
+.wrapper {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 420px;
-  background: black;
+  background: #1a1a1a;
   border: 2px solid rgb(255, 255, 255, .2);
   backdrop-filter: blur(20px);
   box-shadow: 0 0 10px rgba(0, 0, 0, .2);
@@ -158,7 +166,7 @@ body{
   padding: 30px 40px;
 }
 
-.wrapper h1{
+.wrapper h1 {
   font-size: 36px;
   text-align: center;
 }
@@ -217,9 +225,36 @@ body{
   font-weight: 600;
 }
 
+.input-box input[type="file"] {
+  display: none;
+}
+
+.file-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  border: 2px solid rgb(225, 225, 225, .2);
+  border-radius: 40px;
+  font-size: 16px;
+  color: #fff;
+  padding: 20px 45px 20px 20px;
+  cursor: pointer;
+}
+
+.file-label span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 @media (max-width: 600px) {
   .wish-list {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
-</style>>
+</style>
