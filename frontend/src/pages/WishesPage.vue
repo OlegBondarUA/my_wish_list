@@ -16,10 +16,10 @@
     </div>
 
     <div v-if="showForm" class="wrapper">
-      <form action="">
+      <form @submit.prevent="submitForm">
         <h1>Add New Wish</h1>
         <div class="input-box">
-          <input type="text" placeholder="Title" required/>
+          <input type="text" v-model="newWish.title" placeholder="Title" required/>
           <i class='bx bx-captions'></i>
         </div>
 
@@ -32,17 +32,17 @@
         </div>
 
         <div class="input-box">
-          <input type="text" placeholder="Description" required/>
+          <input type="text" v-model="newWish.description" placeholder="Description" required/>
           <i class='bx bx-detail'></i>
         </div>
 
         <div class="input-box">
-          <input type="url" placeholder="link" required/>
+          <input type="url" v-model="newWish.link" placeholder="link" required/>
           <i class='bx bx-link'></i>
         </div>
 
         <div class="input-box">
-          <input type="number" placeholder="Price" required/>
+          <input type="number" v-model="newWish.price" placeholder="Price" required/>
           <i class='bx bx-dollar'></i>
         </div>
 
@@ -65,9 +65,9 @@ export default {
   data() {
     return {
       wishes: [],
-      showForm: false, // Додаємо стан для показу форми
+      showForm: false,
       newWish: {
-        name: '',
+        title: '',
         image: null,
         description: '',
         link: '',
@@ -92,15 +92,33 @@ export default {
     },
     handleFileChange(event) {
       const fileInput = event.target;
-      const fileName = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
-      document.getElementById('file-name').textContent = fileName;
+      document.getElementById('file-name').textContent = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
+      this.newWish.image = fileInput.files[0];
     },
-    handleFileUpload(event) {
-      this.newWish.image = event.target.files[0];
-    },
-    submitForm() {
-      console.log(this.newWish); // Логіка для відправлення нового бажання
-      this.toggleForm(); // Закриваємо форму після додавання
+    async submitForm() {
+      const formData = new FormData();
+      formData.append('title', this.newWish.title);
+      formData.append('image', this.newWish.image);
+      formData.append('description', this.newWish.description);
+      formData.append('link', this.newWish.link);
+      formData.append('price', this.newWish.price);
+      console.log(formData)
+      try {
+        const response = await fetch('http://localhost:8000/api/add-wishes/', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          console.log('Wish added successfully');
+          this.toggleForm();
+          await this.fetchWishes();
+        } else {
+          console.error('Failed to add wish:', await response.json());
+        }
+      } catch (error) {
+        console.error('Error adding wish:', error);
+      }
     },
   },
 };
@@ -171,7 +189,7 @@ body {
   text-align: center;
 }
 
-.wrapper .input-box{
+.wrapper .input-box {
   width: 100%;
   height: 50px;
   margin: 30px 0;
@@ -179,7 +197,7 @@ body {
 }
 
 .input-box input,
-.input-box textarea{
+.input-box textarea {
   width: 100%;
   height: 100%;
   background: transparent;
@@ -192,11 +210,11 @@ body {
 }
 
 .input-box input::placeholder,
-.input-box textarea::placeholder{
+.input-box textarea::placeholder {
   color: #fff;
 }
 
-.input-box i{
+.input-box i {
   position: absolute;
   right: 20px;
   top: 50%;
@@ -204,14 +222,14 @@ body {
   font-size: 20px;
 }
 
-.wrapper .button-box{
+.wrapper .button-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
 }
 
-.wrapper .button-box button{
+.wrapper .button-box button {
   width: 100%;
   height: 45px;
   background: #fff;
