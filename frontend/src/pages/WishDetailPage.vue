@@ -31,29 +31,116 @@ export default {
     this.fetchWishDetail();
   },
   methods: {
+    getToken() {
+      return localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+    },
+
+    getRefreshToken() {
+      return localStorage.getItem('refresh_token') || sessionStorage.getItem('refresh_token');
+    },
+
+    async refreshAccessToken() {
+      try {
+        const refreshToken = this.getRefreshToken();
+        const response = await fetch('http://localhost:8000/api/token/refresh/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refresh: refreshToken }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('access_token', data.access);
+          return data.access;
+        } else {
+          console.error('Failed to refresh token:', await response.json());
+        }
+      } catch (error) {
+        console.error('Error refreshing token:', error);
+      }
+    },
+
     async fetchWishDetail() {
       try {
-        const response = await fetch(`http://localhost:8000/api/wishes/${this.$route.params.id}/`);
-        this.wish = await response.json();
+        let token = this.getToken();
+        if (!token) {
+          throw new Error('User is not authenticated');
+        }
+
+        let response = await fetch(`http://localhost:8000/api/wishes/${this.$route.params.id}/`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 401) {
+          const errorData = await response.json();
+          if (errorData.code === 'token_not_valid') {
+            token = await this.refreshAccessToken();
+            if (token) {
+              response = await fetch(`http://localhost:8000/api/wishes/${this.$route.params.id}/`, {
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+            }
+          }
+        }
+
+        if (response.ok) {
+          this.wish = await response.json();
+        } else {
+          console.error('Error fetching wish detail:', await response.json());
+        }
       } catch (error) {
         console.error('Error fetching wish detail:', error);
       }
     },
+
     async reserveWish() {
       try {
-        const response = await fetch(`http://localhost:8000/api/wishes/${this.wish.id}/reserve/`, {
+        let token = this.getToken();
+        if (!token) {
+          throw new Error('User is not authenticated');
+        }
+
+        let response = await fetch(`http://localhost:8000/api/wishes/${this.wish.id}/reserve/`, {
           method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
         });
+
+        if (response.status === 401) {
+          const errorData = await response.json();
+          if (errorData.code === 'token_not_valid') {
+            token = await this.refreshAccessToken();
+            if (token) {
+              response = await fetch(`http://localhost:8000/api/wishes/${this.wish.id}/reserve/`, {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+            }
+          }
+        }
+
         if (response.ok) {
           this.wish.reserved = true;
+        } else {
+          console.error('Error reserving wish:', await response.json());
         }
       } catch (error) {
         console.error('Error reserving wish:', error);
       }
-    }
-  }
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .wish-detail {

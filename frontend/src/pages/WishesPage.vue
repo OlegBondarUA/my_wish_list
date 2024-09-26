@@ -79,22 +79,86 @@ export default {
     this.fetchWishes();
   },
   methods: {
+    getToken() {
+      return localStorage.getItem('access_token') || sessionStorage.getItem('access_token');
+    },
+
+    getRefreshToken() {
+      return localStorage.getItem('refresh_token') || sessionStorage.getItem('refresh_token');
+    },
+
+    async refreshAccessToken() {
+      try {
+        const refreshToken = this.getRefreshToken();
+        const response = await fetch('http://localhost:8000/api/token/refresh/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refresh: refreshToken }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          localStorage.setItem('access_token', data.access);
+          return data.access;
+        } else {
+          console.error('Failed to refresh token:', await response.json());
+        }
+      } catch (error) {
+        console.error('Error refreshing token:', error);
+      }
+    },
+
     async fetchWishes() {
       try {
-        const response = await fetch('http://localhost:8000/api/wishes/');
-        this.wishes = await response.json();
+        let token = this.getToken();
+        if (!token) {
+          throw new Error('User is not authenticated');
+        }
+
+        let response = await fetch('http://localhost:8000/api/wishes/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 401) {
+          const errorData = await response.json();
+          if (errorData.code === 'token_not_valid') {
+            token = await this.refreshAccessToken();
+            if (token) {
+              response = await fetch('http://localhost:8000/api/wishes/', {
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+              });
+            }
+          }
+        }
+
+        if (response.ok) {
+          this.wishes = await response.json();
+        } else {
+          console.error('Failed to fetch wishes:', await response.json());
+        }
       } catch (error) {
         console.error('Failed to fetch wishes:', error);
       }
     },
+
     toggleForm() {
       this.showForm = !this.showForm;
     },
+
     handleFileChange(event) {
       const fileInput = event.target;
       document.getElementById('file-name').textContent = fileInput.files[0] ? fileInput.files[0].name : 'No file chosen';
       this.newWish.image = fileInput.files[0];
     },
+
     async submitForm() {
       const formData = new FormData();
       formData.append('title', this.newWish.title);
@@ -102,12 +166,36 @@ export default {
       formData.append('description', this.newWish.description);
       formData.append('link', this.newWish.link);
       formData.append('price', this.newWish.price);
-      console.log(formData)
+
       try {
-        const response = await fetch('http://localhost:8000/api/add-wishes/', {
+        let token = this.getToken();
+        if (!token) {
+          throw new Error('User is not authenticated');
+        }
+
+        let response = await fetch('http://localhost:8000/api/wishes/add/', {
           method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
           body: formData,
         });
+
+        if (response.status === 401) {
+          const errorData = await response.json();
+          if (errorData.code === 'token_not_valid') {
+            token = await this.refreshAccessToken();
+            if (token) {
+              response = await fetch('http://localhost:8000/api/wishes/add/', {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                },
+                body: formData,
+              });
+            }
+          }
+        }
 
         if (response.ok) {
           console.log('Wish added successfully');
@@ -123,6 +211,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 h1 {

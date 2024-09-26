@@ -1,22 +1,22 @@
 <template>
   <div class="wrapper">
-    <form action="">
+    <form @submit.prevent="login">
       <h1>Login</h1>
       <div class="input-box">
-        <input type="text" placeholder="Username" required>
+        <input v-model="username" type="text" placeholder="Username" required />
         <i class="bx bx-user"></i>
       </div>
       <div class="input-box">
-        <input type="password" placeholder="password" required>
+        <input v-model="password" type="password" placeholder="Password" required />
         <i class="bx bx-lock-alt"></i>
       </div>
       <div class="remember">
-        <label for=""><input type="checkbox">Remember me</label>
+        <label><input type="checkbox" v-model="rememberMe" />Remember me</label>
         <a href="#">Forgot password?</a>
       </div>
       <button type="submit" class="btn">Login</button>
       <div class="register-link">
-        <p>Don`t have an account? <a href="#">Register</a></p>
+        <p>Don’t have an account? <a href="#">Register</a></p>
       </div>
     </form>
   </div>
@@ -25,7 +25,51 @@
 <script>
 export default {
   name: 'LoginPage',
-}
+  data() {
+    return {
+      username: '',
+      password: '',
+      rememberMe: false,
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        const response = await fetch('http://localhost:8000/api/token/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: this.username,
+            password: this.password,
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const token = data.access;
+
+          if (this.rememberMe) {
+            localStorage.setItem('access_token', token);
+          } else {
+            sessionStorage.setItem('access_token', token);
+          }
+
+          this.$router.push('/');
+
+        } else {
+          const errorData = await response.json();
+          console.error('Login failed:', errorData);
+          alert('Invalid credentials');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        alert('Something went wrong, please try again later.');
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
