@@ -48,12 +48,15 @@ export default {
 
         if (response.ok) {
           const data = await response.json();
-          const token = data.access;
+          const accessToken = data.access;
+          const refreshToken = data.refresh;
 
           if (this.rememberMe) {
-            localStorage.setItem('access_token', token);
+            localStorage.setItem('access_token', accessToken);
+            localStorage.setItem('refresh_token', refreshToken);
           } else {
-            sessionStorage.setItem('access_token', token);
+            sessionStorage.setItem('access_token', accessToken);
+            sessionStorage.setItem('refresh_token', refreshToken);
           }
 
           this.$router.push('/');
